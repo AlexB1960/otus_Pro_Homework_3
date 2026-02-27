@@ -1,12 +1,12 @@
 package dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Value;
 
 @Builder
-@Value
-@Getter
+@Data
 public class Category {
   Integer id;
   String name;

@@ -57,25 +57,45 @@ public class PetPostTest extends AbsMethodsDTO {
           .post(petURL)
         .then()
           .log().ifValidationFails()
-          //.log().all()
           .assertThat()
           .body(matchesJsonSchemaInClasspath("petschema.json"))
           .body("category.name", Matchers.equalTo("dog"))
           .body("name", Matchers.equalTo("Такса"))
-          .body("photoUrls[0]", Matchers.equalTo("https://images/first.jpg"));
-          //.extract().body().jsonPath().getObject("$", PetResponseDTO.class);
+          .body("photoUrls[0]", Matchers.equalTo("https://images/first.jpg"))
+          .body("tags[1].name", Matchers.equalTo("Tag N2"));
           //.extract().body().as(PetResponseDTO.class);
 
+  }
 
-    //Assertions.assertEquals(petRequestDTO, petResponseDTO);
-    //System.out.println(petResponseDTO.getName());
+  @Test
+  public void createPet405Test() {
+    spec.installSpecification(spec.requestSpec(baseURL, pathURL),
+        spec.responseSpec(405, null, null));
 
-    /*Assertions.assertAll(
-        () -> Assertions.assertEquals(petRequestDTO.getId(), petResponseDTO.getId(), "Incorrect Id"),
-        () -> Assertions.assertEquals(petRequestDTO.getName(), petResponseDTO.getName(), "Incorrect title"),
-        () -> Assertions.assertEquals(petRequestDTO.getDescription(), petResponseDTO.getDescription(), "Incorrect description"),
-        () -> Assertions.assertEquals(petRequestDTO.getPageCount(), petResponseDTO.getPageCount(), "Incorrect pageCount")
-    );*/
+    PetRequestDTO petRequestDTO = PetRequestDTO.builder()
+        .id(0)
+        .category(setCategory("dog"))
+        .name("Такса")
+        .photoUrls(setPhotoUrl("https://images/first.jpg", "https://images/second.jpg"))
+        .tags(setTags("Tag N1", "Tag N2", "Tag N3", "Tag N4"))
+        .status("available")
+        .build();
+
+    RestAssured
+        .given()
+        .contentType(ContentType.JSON)
+        .auth().oauth2("")
+        .body(petRequestDTO)
+        .when()
+        .post(petURL)
+        .then()
+        .log().ifValidationFails()
+        .assertThat()
+        .body(matchesJsonSchemaInClasspath("petschema.json"));
+        /*.body("category.name", Matchers.equalTo("dog"))
+        .body("name", Matchers.equalTo("Такса"))
+        .body("photoUrls[0]", Matchers.equalTo("https://images/first.jpg"))
+        .body("tags[1].name", Matchers.equalTo("Tag N2"));*/
 
   }
 

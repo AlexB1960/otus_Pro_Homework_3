@@ -1,14 +1,14 @@
 package dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Value;
 
 import java.util.ArrayList;
 
 @Builder
-@Value
-@Getter
+@Data
 public class PetRequestDTO {
   Integer id;
   Category category;
