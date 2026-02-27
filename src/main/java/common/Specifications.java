@@ -11,9 +11,10 @@ import org.hamcrest.Matchers;
 
 public class Specifications {
 
-    public RequestSpecification requestSpec(String url) {
+    public RequestSpecification requestSpec(String url, String path) {
         return new RequestSpecBuilder()
                 .setBaseUri(url)
+                .setBasePath(path)
                 .setContentType(ContentType.JSON)
                 .build();
     }
