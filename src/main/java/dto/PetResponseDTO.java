@@ -9,7 +9,7 @@ import java.util.ArrayList;
 @Builder
 @Value
 @Getter
-public class PetResponceDTO {
+public class PetResponseDTO {
   Integer id;
   Category category;
   String name;

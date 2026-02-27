@@ -1,19 +1,20 @@
 package pet;
 
+import common.AbsMethodsDTO;
 import common.Specifications;
-import dto.Category;
 import dto.PetRequestDTO;
-import dto.Tag;
+import dto.PetResponseDTO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
-
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.CoreMatchers.equalTo;
 
-public class PetPostTest {
+public class PetPostTest extends AbsMethodsDTO {
   private final String baseURL = System.getProperty("baseURL");
   private final String pathURL = "/v2";
   private final String petURL = "/pet";
@@ -37,90 +38,45 @@ public class PetPostTest {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
         spec.responseSpec(200, null, null));
 
-    /*ArrayList<String> photoUrls = new ArrayList<>();
-    photoUrls.add("https://images/first.jpg");
-    photoUrls.add("https://images/second.jpg");*/
-
-    /*Tag tag = Tag.builder()
-        .id(0)
-        .name("Tag N1")
-        .build();
-    ArrayList<Tag> tags = new ArrayList<>();
-    tags.add(tag);
-    tag = Tag.builder()
-        .id(0)
-        .name("Tag N2")
-        .build();
-    tags.add(tag);*/
-
-    Category category = Category.builder()
-        .id(0)
-        .name("dog")
-        .build();
-
     PetRequestDTO petRequestDTO = PetRequestDTO.builder()
         .id(0)
-        .category(category)
+        .category(setCategory("dog"))
         .name("Такса")
-        .photoUrls(getPhotoUrl("https://images/first.jpg", "https://images/second.jpg"))
-        .tags(getTags("Tag N1", "Tag N2"))
-        //.tags(tags)
+        .photoUrls(setPhotoUrl("https://images/first.jpg", "https://images/second.jpg"))
+        .tags(setTags("Tag N1", "Tag N2", "Tag N3", "Tag N4"))
         .status("available")
         .build();
 
-
-    RestAssured.given()
-          //.baseUri(baseURL)
-          //.basePath(pathURL)
+    //PetResponseDTO petResponseDTO =
+    RestAssured
+        .given()
           .contentType(ContentType.JSON)
           .auth().oauth2("")
           .body(petRequestDTO)
-          /*.body("{\n" +
-              "  \"id\": 0,\n" +
-              "  \"category\": {\n" +
-              "    \"id\": 0,\n" +
-              "    \"name\": \"Tax\"\n" +
-              "  },\n" +
-              "  \"name\": \"dog\",\n" +
-              "  \"photoUrls\": [\n" +
-              "    \"dog.ru\"\n" +
-              "  ],\n" +
-              "  \"tags\": [\n" +
-              "    {\n" +
-              "      \"id\": 0,\n" +
-              "      \"name\": \"string\"\n" +
-              "    }\n" +
-              "  ],\n" +
-              "  \"status\": \"available\"\n" +
-              "}")*/
         .when()
           .post(petURL)
         .then()
-          .log().all()
-          .assertThat().body(matchesJsonSchemaInClasspath("petschema.json"));
+          .log().ifValidationFails()
+          //.log().all()
+          .assertThat()
+          .body(matchesJsonSchemaInClasspath("petschema.json"))
+          .body("category.name", Matchers.equalTo("dog"))
+          .body("name", Matchers.equalTo("Такса"))
+          .body("photoUrls[0]", Matchers.equalTo("https://images/first.jpg"));
+          //.extract().body().jsonPath().getObject("$", PetResponseDTO.class);
+          //.extract().body().as(PetResponseDTO.class);
 
-  }
 
-  ArrayList<String> getPhotoUrl(String... urlArgs) {
-    ArrayList<String> photoUrls = new ArrayList<>();
-    for (String photoUrl : urlArgs) {
-      photoUrls.add(photoUrl);
-    }
-    /*photoUrls.add("https://images/first.jpg");
-    photoUrls.add("https://images/second.jpg");*/
-    return photoUrls;
-  }
+    //Assertions.assertEquals(petRequestDTO, petResponseDTO);
+    //System.out.println(petResponseDTO.getName());
 
-  ArrayList<Tag> getTags(String... tagArgs) {
-    ArrayList<Tag> tags = new ArrayList<>();
-    for (String tagName : tagArgs) {
-      Tag tag = Tag.builder()
-          .id(0)
-          .name(tagName)
-          .build();
-      tags.add(tag);
-    }
-    return tags;
+    /*Assertions.assertAll(
+        () -> Assertions.assertEquals(petRequestDTO.getId(), petResponseDTO.getId(), "Incorrect Id"),
+        () -> Assertions.assertEquals(petRequestDTO.getName(), petResponseDTO.getName(), "Incorrect title"),
+        () -> Assertions.assertEquals(petRequestDTO.getDescription(), petResponseDTO.getDescription(), "Incorrect description"),
+        () -> Assertions.assertEquals(petRequestDTO.getPageCount(), petResponseDTO.getPageCount(), "Incorrect pageCount")
+    );*/
+
   }
 
 }
