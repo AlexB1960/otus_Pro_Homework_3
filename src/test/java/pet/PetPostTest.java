@@ -73,12 +73,12 @@ public class PetPostTest extends AbsMethodsDTO {
         spec.responseSpec(405, null, null));
 
     PetRequestDTO petRequestDTO = PetRequestDTO.builder()
-        .id(0)
-        .category(setCategory("dog"))
-        .name("Такса")
-        .photoUrls(setPhotoUrl("https://images/first.jpg", "https://images/second.jpg"))
-        .tags(setTags("Tag N1", "Tag N2", "Tag N3", "Tag N4"))
-        .status("available")
+        .id(-1)
+        .category(setCategory(""))
+        .name("")
+        .photoUrls(setPhotoUrl(""))
+        .tags(setTags(""))
+        .status("")
         .build();
 
     RestAssured
