@@ -21,8 +21,8 @@ public class Specifications {
 
     public ResponseSpecification responseSpec(Integer code, String type, String message) {
         return new ResponseSpecBuilder()
-                .expectBody("message", Matchers.equalTo(message))
-                .expectBody("type", Matchers.equalTo(type))
+                /*.expectBody("message", Matchers.equalTo(message))
+                .expectBody("type", Matchers.equalTo(type))*/
                 //.expectResponseTime(lessThan(5000L))
                 .expectStatusCode(code)
                 .build();

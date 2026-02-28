@@ -20,7 +20,7 @@ public abstract class AbsMethodsDTO {
     int i = 0;
     for (String tagName : tagArgs) {
       Tag tag = Tag.builder()
-          .id(i)
+          .id(0L)
           .name(tagName)
           .build();
       tags.add(tag);
@@ -31,7 +31,7 @@ public abstract class AbsMethodsDTO {
 
   protected Category setCategory(String nameCategory) {
     Category category = Category.builder()
-        .id(0)
+        .id(0L)
         .name(nameCategory)
         .build();
     return category;

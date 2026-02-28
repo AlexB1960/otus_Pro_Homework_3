@@ -1,16 +1,14 @@
 package dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Value;
+import lombok.*;
 
 import java.util.ArrayList;
 
 @Builder
-@Data
+@Value
+@Getter
 public class PetRequestDTO {
-  Integer id;
+  Long id;
   Category category;
   String name;
   ArrayList<String> photoUrls;

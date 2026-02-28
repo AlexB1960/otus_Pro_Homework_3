@@ -1,16 +1,15 @@
 package dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
 import java.util.ArrayList;
 
 @Builder
-@Data
+@Value
+@Getter
 public class PetResponseDTO {
-  Integer id;
+  Long id;
   Category category;
   String name;
   ArrayList<String> photoUrls;

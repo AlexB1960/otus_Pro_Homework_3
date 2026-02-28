@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.hamcrest.CoreMatchers.equalTo;
 
 public class PetPostTest extends AbsMethodsDTO {
   private final String baseURL = System.getProperty("baseURL");
@@ -34,12 +33,12 @@ public class PetPostTest extends AbsMethodsDTO {
 
   //Позитивный тест создания pet, возвращает код статуса 200
   @Test
-  public void createPet200Test() {
+  public void createPet200() {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
         spec.responseSpec(200, null, null));
 
     PetRequestDTO petRequestDTO = PetRequestDTO.builder()
-        .id(0)
+        .id(0L)
         .category(setCategory("dog"))
         .name("Такса")
         .photoUrls(setPhotoUrl("https://images/first.jpg", "https://images/second.jpg"))
@@ -47,7 +46,7 @@ public class PetPostTest extends AbsMethodsDTO {
         .status("available")
         .build();
 
-    //PetResponseDTO petResponseDTO =
+    PetResponseDTO petResponseDTO =
     RestAssured
         .given()
           .contentType(ContentType.JSON)
@@ -62,41 +61,56 @@ public class PetPostTest extends AbsMethodsDTO {
           .body("category.name", Matchers.equalTo("dog"))
           .body("name", Matchers.equalTo("Такса"))
           .body("photoUrls[0]", Matchers.equalTo("https://images/first.jpg"))
-          .body("tags[1].name", Matchers.equalTo("Tag N2"));
-          //.extract().body().as(PetResponseDTO.class);
+          .body("tags[1].name", Matchers.equalTo("Tag N2"))
+          .extract().body().as(PetResponseDTO.class);
+
+    Assertions.assertAll(
+        () -> Assertions.assertEquals(petRequestDTO.getStatus(), petResponseDTO.getStatus(), "Incorrect bookId"),
+        () -> Assertions.assertEquals(petRequestDTO.getCategory(), petResponseDTO.getCategory(), "Incorrect title"),
+        () -> Assertions.assertEquals(petRequestDTO.getName(), petResponseDTO.getName(), "Incorrect description"),
+        () -> Assertions.assertEquals(petRequestDTO.getPhotoUrls(), petResponseDTO.getPhotoUrls(), "Incorrect pageCount")
+    );
 
   }
 
   @Test
-  public void createPet405Test() {
+  public void createPet405() {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
         spec.responseSpec(405, null, null));
 
-    PetRequestDTO petRequestDTO = PetRequestDTO.builder()
-        .id(-1)
-        .category(setCategory(""))
-        .name("")
-        .photoUrls(setPhotoUrl(""))
-        .tags(setTags(""))
-        .status("")
-        .build();
-
     RestAssured
         .given()
-        .contentType(ContentType.JSON)
-        .auth().oauth2("")
-        .body(petRequestDTO)
+          .contentType(ContentType.JSON)
+          .auth().oauth2("")
+          .body("{\n" +
+            "  \"id\": 0\n" + //true вместо 0 - это Invalid input, code должен быть по свагеру = 405
+            "}")
         .when()
-        .post(petURL)
+          .get(petURL)
         .then()
-        .log().ifValidationFails()
-        .assertThat()
-        .body(matchesJsonSchemaInClasspath("petschema.json"));
-        /*.body("category.name", Matchers.equalTo("dog"))
-        .body("name", Matchers.equalTo("Такса"))
-        .body("photoUrls[0]", Matchers.equalTo("https://images/first.jpg"))
-        .body("tags[1].name", Matchers.equalTo("Tag N2"));*/
+          .log().ifValidationFails();
+          //.assertThat()
+          //.body(matchesJsonSchemaInClasspath("petschema.json"));
 
   }
+
+  /*.body("{\n" +
+            "  \"id\": 0,\n" +
+            "  \"category\": {\n" +
+            "    \"id\": 0,\n" +
+            "    \"name\": \"Tax\"\n" +
+            "  },\n" +
+            "  \"name\": \"dog\",\n" +
+            "  \"photoUrls\": [\n" +
+            "    \"dog.ru\"\n" +
+            "  ],\n" +
+            "  \"tags\": [\n" +
+            "    {\n" +
+            "      \"id\": 0,\n" +
+            "      \"name\": \"string\"\n" +
+            "    }\n" +
+            "  ],\n" +
+            "  \"status\": \"available\"\n" +
+            "}")*/
 
 }

@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.Value;
 
 @Builder
-@Data
+@Value
+@Getter
 public class Category {
-  Integer id;
+  Long id;
   String name;
 }

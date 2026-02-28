@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.Value;
 
 @Builder
-@Data
+@Value
+@Getter
 public class Tag {
-  Integer id;
+  Long id;
   String name;
 }
