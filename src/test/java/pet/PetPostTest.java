@@ -7,31 +7,26 @@ import dto.PetResponseDTO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
+/**
+ * Класс содержит тесты API-метода POST /pet/findByStatus
+ * Add a new pet to the store
+ */
 public class PetPostTest extends AbsMethodsDTO {
   private final String baseURL = System.getProperty("baseURL");
   private final String pathURL = "/v2";
   private final String petURL = "/pet";
   private Specifications spec = new Specifications();
 
-  //Создание нужных тестовых данных - токенов и ID пользователей
-  @BeforeEach
-  public void setTestData() {
-
-  }
-
-  //Удаление всех динамически созданных тестовых данных и закрытие SqlConnector
-  @AfterEach
-  public void deleteTestData() {
-
-  }
-
-  //Позитивный тест создания pet, возвращает код статуса 200
+  /*Позитивный тест создания одного pet со значениями во всех полях.
+  Проверка получения кода статуса 200 через спецификацию,
+  проверка части полученных значений через Matchers.equalTo в составе body(),
+  проверка второй части полученных значений через soft assert
+  и валидация схемы postpetschema.json
+  */
   @Test
   public void createPet200() {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
@@ -72,7 +67,9 @@ public class PetPostTest extends AbsMethodsDTO {
     );
   }
 
-  //Негативный тест создания pet через get, возвращает код статуса 405
+  /*Негативный тест создания pet через запрос get.
+  Проверка получения кода статуса 405 через спецификацию.
+  */
   @Test
   public void createPet405() {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
@@ -83,34 +80,12 @@ public class PetPostTest extends AbsMethodsDTO {
           .contentType(ContentType.JSON)
           .auth().oauth2("")
           .body("{\n" +
-            "  \"id\": 0\n" + //true вместо 0 - это Invalid input, code должен быть по свагеру = 405
+            "  \"id\": 0\n" +
             "}")
         .when()
           .get(petURL) //get вместо post
         .then()
           .log().all();
-          //.log().ifValidationFails()
-          //.assertThat()
-          //.body(matchesJsonSchemaInClasspath("postpetschema.json"));
   }
-
-  /*.body("{\n" +
-            "  \"id\": 0,\n" +
-            "  \"category\": {\n" +
-            "    \"id\": 0,\n" +
-            "    \"name\": \"Tax\"\n" +
-            "  },\n" +
-            "  \"name\": \"dog\",\n" +
-            "  \"photoUrls\": [\n" +
-            "    \"dog.ru\"\n" +
-            "  ],\n" +
-            "  \"tags\": [\n" +
-            "    {\n" +
-            "      \"id\": 0,\n" +
-            "      \"name\": \"string\"\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"status\": \"available\"\n" +
-            "}")*/
 
 }

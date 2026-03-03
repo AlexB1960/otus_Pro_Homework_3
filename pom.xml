@@ -16,9 +16,7 @@
     <junit.version>5.13.4</junit.version>
     <rest.assured.version>5.5.0</rest.assured.version>
     <jackson.version>2.20.0</jackson.version>
-    <datafaker.version>2.5.2</datafaker.version>
     <lombok.version>1.18.34</lombok.version>
-    <postgresql.version>42.7.7</postgresql.version>
     <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
     <surefire.version>3.5.3</surefire.version>
   </properties>
@@ -34,7 +32,12 @@
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <version>${rest.assured.version}</version>
-      <!--<scope>test</scope>-->
+    </dependency>
+
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>json-schema-validator</artifactId>
+      <version>${rest.assured.version}</version>
     </dependency>
 
     <dependency>
@@ -48,32 +51,12 @@
       <version>1.9.13</version>
     </dependency>-->
 
-    <!--Faker для тестов, английский только-->
-    <dependency>
-      <groupId>net.datafaker</groupId>
-      <artifactId>datafaker</artifactId>
-      <version>${datafaker.version}</version>
-    </dependency>
-
     <!--библиотека lombok-->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>${postgresql.version}</version>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/io.rest-assured/json-schema-validator -->
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>json-schema-validator</artifactId>
-      <version>5.5.0</version>
     </dependency>
 
   </dependencies>
@@ -89,13 +72,13 @@
           <target>${maven.compiler.target}</target>
           <source>${maven.compiler.source}</source>
           <!--зависимость lombok-->
-          <annotationProcessorPaths>
+          <!--<annotationProcessorPaths>
             <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
               <version>${lombok.version}</version>
             </path>
-          </annotationProcessorPaths>
+          </annotationProcessorPaths>-->
         </configuration>
       </plugin>
       <!--surefire - для запуска юнит-тестов из консоли-->
