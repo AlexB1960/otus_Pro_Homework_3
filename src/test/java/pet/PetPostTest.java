@@ -35,7 +35,7 @@ public class PetPostTest extends AbsMethodsDTO {
   @Test
   public void createPet200() {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
-        spec.responseSpec(200, null, null));
+        spec.responseSpec(200));
 
     PetRequestDTO petRequestDTO = PetRequestDTO.builder()
         .id(0L)
@@ -57,7 +57,7 @@ public class PetPostTest extends AbsMethodsDTO {
         .then()
           .log().ifValidationFails()
           .assertThat()
-          .body(matchesJsonSchemaInClasspath("petschema.json"))
+          .body(matchesJsonSchemaInClasspath("postpetschema.json"))
           .body("category.name", Matchers.equalTo("dog"))
           .body("name", Matchers.equalTo("Такса"))
           .body("photoUrls[0]", Matchers.equalTo("https://images/first.jpg"))
@@ -65,18 +65,18 @@ public class PetPostTest extends AbsMethodsDTO {
           .extract().body().as(PetResponseDTO.class);
 
     Assertions.assertAll(
-        () -> Assertions.assertEquals(petRequestDTO.getStatus(), petResponseDTO.getStatus(), "Incorrect bookId"),
-        () -> Assertions.assertEquals(petRequestDTO.getCategory(), petResponseDTO.getCategory(), "Incorrect title"),
-        () -> Assertions.assertEquals(petRequestDTO.getName(), petResponseDTO.getName(), "Incorrect description"),
-        () -> Assertions.assertEquals(petRequestDTO.getPhotoUrls(), petResponseDTO.getPhotoUrls(), "Incorrect pageCount")
+        () -> Assertions.assertEquals(petRequestDTO.getStatus(), petResponseDTO.getStatus(), "Incorrect status"),
+        () -> Assertions.assertEquals(petRequestDTO.getCategory(), petResponseDTO.getCategory(), "Incorrect category"),
+        () -> Assertions.assertEquals(petRequestDTO.getTags(), petResponseDTO.getTags(), "Incorrect tags"),
+        () -> Assertions.assertEquals(petRequestDTO.getPhotoUrls(), petResponseDTO.getPhotoUrls(), "Incorrect photoUrls")
     );
-
   }
 
+  //Негативный тест создания pet через get, возвращает код статуса 405
   @Test
   public void createPet405() {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
-        spec.responseSpec(405, null, null));
+        spec.responseSpec(405));
 
     RestAssured
         .given()
@@ -86,12 +86,12 @@ public class PetPostTest extends AbsMethodsDTO {
             "  \"id\": 0\n" + //true вместо 0 - это Invalid input, code должен быть по свагеру = 405
             "}")
         .when()
-          .get(petURL)
+          .get(petURL) //get вместо post
         .then()
-          .log().ifValidationFails();
+          .log().all();
+          //.log().ifValidationFails()
           //.assertThat()
-          //.body(matchesJsonSchemaInClasspath("petschema.json"));
-
+          //.body(matchesJsonSchemaInClasspath("postpetschema.json"));
   }
 
   /*.body("{\n" +

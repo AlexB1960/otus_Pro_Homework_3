@@ -7,12 +7,8 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.postgresql.gss.GSSOutputStream;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -23,10 +19,11 @@ public class PetGetTest extends AbsMethodsDTO {
   private final String petsURL = "/pet/findByStatus";
   private Specifications spec = new Specifications();
 
+  //Позитивный тест получения всех pets со статусом available
   @Test
   public void getPets200() {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
-        spec.responseSpec(200, null, null));
+        spec.responseSpec(200));
 
     List<PetResponseDTO> pets =
     RestAssured
@@ -37,26 +34,20 @@ public class PetGetTest extends AbsMethodsDTO {
         .when()
           .get(petsURL)
         .then()
-          .log().all()
-          //.extract().response().jsonPath().getList(".", PetResponseDTO.class);
+          .log().ifValidationFails()
+          .assertThat()
+          .body(matchesJsonSchemaInClasspath("getpetschema.json"))
+          //можно . можно $
           .extract().body().jsonPath().getList(".", PetResponseDTO.class);
-          //.extract().as(PetResponseDTO.class);
-          //.extract().body().jsonPath().getList(".", PetResponseDTO.class);
-    //JsonPath jsonPath = pets.jsonPath();
-    //List<PetResponseDTO> petList = new ArrayList<>(jsonPath.get("$"));
 
-    System.out.println("Размер списка = " + pets.size());
-    System.out.println("Имя name = " + pets.getFirst().getName());
-    /*System.out.println("Размер списка = " + pets.body().toString());
-    System.out.println("Имя name = " + petList.getFirst().getName());*/
-    //System.out.println(pets.getFirst().getName());
     pets.forEach(x -> Assertions.assertEquals("available", x.getStatus()));
   }
 
+  //Негативный тест получения всех pets с несуществующим статусом WrongStatus
   @Test
   public void getPets400() {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
-        spec.responseSpec(400, null, null));
+        spec.responseSpec(400));
 
     RestAssured
         .given()

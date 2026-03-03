@@ -17,10 +17,10 @@ public abstract class AbsMethodsDTO {
 
   protected ArrayList<Tag> setTags(String... tagArgs) {
     ArrayList<Tag> tags = new ArrayList<>();
-    int i = 0;
+    Long i = 0L;
     for (String tagName : tagArgs) {
       Tag tag = Tag.builder()
-          .id(0L)
+          .id(i)
           .name(tagName)
           .build();
       tags.add(tag);
