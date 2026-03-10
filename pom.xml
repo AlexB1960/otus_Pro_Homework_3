@@ -19,6 +19,9 @@
     <lombok.version>1.18.34</lombok.version>
     <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
     <surefire.version>3.5.3</surefire.version>
+
+    <spotbugs.version>4.9.8.2</spotbugs.version>
+    <checkstyle.version>3.6.0</checkstyle.version>
   </properties>
 
   <dependencies>
@@ -71,14 +74,6 @@
         <configuration>
           <target>${maven.compiler.target}</target>
           <source>${maven.compiler.source}</source>
-          <!--зависимость lombok-->
-          <!--<annotationProcessorPaths>
-            <path>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-              <version>${lombok.version}</version>
-            </path>
-          </annotationProcessorPaths>-->
         </configuration>
       </plugin>
       <!--surefire - для запуска юнит-тестов из консоли-->
@@ -92,6 +87,31 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.version}</version>
+        <configuration>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <configLocation>${project.build.sourceDirectory}/../resources/checkstyle.xml</configLocation>
+        </configuration>
+        <executions>
+          <execution>
+            <id>analyze-compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 
