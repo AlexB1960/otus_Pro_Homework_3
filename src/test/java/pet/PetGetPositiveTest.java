@@ -1,16 +1,19 @@
 package pet;
 
-import common.AbsMethodsPetsDTO;
+import common.AbsMethodsPet;
 import dto.PetResponseDTO;
+import extensions.PetExtensions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.List;
 
 /**
  * Класс содержит позитивные тесты API-метода GET /pet/findByStatus
  * Finds Pets by status
  */
-public class PetGetPositiveTest extends AbsMethodsPetsDTO {
+@ExtendWith(PetExtensions.class)
+public class PetGetPositiveTest { //extends AbsMethodsPet
 
   /*Позитивный тест получения списка всех pets со статусом available.
   Проверка получения кода статуса 200 через спецификацию,

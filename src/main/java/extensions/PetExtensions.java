@@ -1,5 +1,6 @@
-package common;
+package extensions;
 
+import common.Specifications;
 import dto.Category;
 import dto.PetRequestDTO;
 import dto.PetResponseDTO;
@@ -9,17 +10,38 @@ import io.restassured.http.ContentType;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbsMethodsPetsDTO {
+public class PetExtensions implements BeforeEachCallback, AfterEachCallback {
   protected final String baseURL = System.getProperty("baseURL");
   protected final String pathURL = "/v2";
   protected final String petURL = "/pet";
   protected final String petIdURL = "/pet/{petId}";
   protected final String petsURL = "/pet/findByStatus";
   protected Specifications spec = new Specifications();
+  protected List<Long> deletedList = null;
+
+  @Override
+  public void beforeEach(ExtensionContext context) throws Exception {
+    if (deletedList == null) { //если удаление в прошлых тестах завершилось успешно
+      deletedList = new ArrayList<>();
+    }
+  }
+
+  @Override
+  public void afterEach(ExtensionContext context) throws Exception {
+    if (deletedList != null) {
+      for (Long el : deletedList) {
+        deletePetById(el);
+      }
+      deletedList = null;
+    }
+  }
 
   protected ArrayList<String> setPhotoUrl(String... urlArgs) {
     ArrayList<String> photoUrls = new ArrayList<>();

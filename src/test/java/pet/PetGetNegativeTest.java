@@ -1,6 +1,6 @@
 package pet;
 
-import common.AbsMethodsPetsDTO;
+import common.AbsMethodsPet;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
  * Класс содержит негативные тесты API-метода GET /pet/findByStatus
  * Finds Pets by status
  */
-public class PetGetNegativeTest extends AbsMethodsPetsDTO {
+public class PetGetNegativeTest extends AbsMethodsPet {
 
   /*Негативный тест получения списка всех pets с несуществующим статусом WrongStatus.
   Проверка получения кода статуса 400 через спецификацию.

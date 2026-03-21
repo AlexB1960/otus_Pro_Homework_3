@@ -1,6 +1,6 @@
 package pet;
 
-import common.AbsMethodsPetsDTO;
+import common.AbsMethodsPet;
 import dto.PetRequestDTO;
 import dto.PetResponseDTO;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
  * Класс содержит позитивные тесты API-метода POST /pet/findByStatus
  * Add a new pet to the store
  */
-public class PetPostPositiveTest extends AbsMethodsPetsDTO {
+public class PetPostPositiveTest extends AbsMethodsPet {
 
   /*Позитивный тест создания одного pet со значениями во всех полях.
   Проверка получения кода статуса 200 через спецификацию,
@@ -30,9 +30,10 @@ public class PetPostPositiveTest extends AbsMethodsPetsDTO {
         .build();
 
     PetResponseDTO petResponseDTO = addNewPet(petRequestDTO);
+    deletedList.add(petResponseDTO.getId());
     PetResponseDTO createdPet = getPetById(petResponseDTO.getId());
     assertCreatedPet(petRequestDTO, createdPet);
-    deletePetById(petResponseDTO.getId());
+    //deletePetById(petResponseDTO.getId());
   }
 
 }
