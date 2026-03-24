@@ -17,6 +17,7 @@
     <rest.assured.version>5.5.0</rest.assured.version>
     <jackson.version>2.20.0</jackson.version>
     <lombok.version>1.18.34</lombok.version>
+    <guice.version>7.0.0</guice.version>
     <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
     <surefire.version>3.5.3</surefire.version>
 
@@ -60,6 +61,12 @@
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>${guice.version}</version>
     </dependency>
 
   </dependencies>

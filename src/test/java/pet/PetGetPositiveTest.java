@@ -1,11 +1,12 @@
 package pet;
 
-import common.AbsMethodsPet;
+import com.google.inject.Inject;
 import dto.PetResponseDTO;
 import extensions.PetExtensions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import pets.Pets;
 import java.util.List;
 
 /**
@@ -14,6 +15,8 @@ import java.util.List;
  */
 @ExtendWith(PetExtensions.class)
 public class PetGetPositiveTest { //extends AbsMethodsPet
+  @Inject
+  private Pets pet;
 
   /*Позитивный тест получения списка всех pets со статусом available.
   Проверка получения кода статуса 200 через спецификацию,
@@ -22,7 +25,7 @@ public class PetGetPositiveTest { //extends AbsMethodsPet
   */
   @Test
   public void getPets200() {
-    List<PetResponseDTO> pets = getPetsByStatus("available");
+    List<PetResponseDTO> pets = pet.getPetsByStatus("available");
     pets.forEach(x -> Assertions.assertEquals("available", x.getStatus()));
   }
 
