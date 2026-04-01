@@ -6,7 +6,7 @@ import dto.PetResponseDTO;
 import extensions.PetExtensions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import pets.Pets;
+import pets.PetStore;
 
 /**
  * Класс содержит позитивные тесты API-метода POST /pet/findByStatus
@@ -15,7 +15,7 @@ import pets.Pets;
 @ExtendWith(PetExtensions.class)
 public class PetPostPositiveTest {// extends AbsMethodsPet
   @Inject
-  private Pets pet;
+  private PetStore petStore;
 
   /*Позитивный тест создания одного pet со значениями во всех полях.
   Проверка получения кода статуса 200 через спецификацию,
@@ -28,17 +28,17 @@ public class PetPostPositiveTest {// extends AbsMethodsPet
   public void createPet200() {
     PetRequestDTO petRequestDTO = PetRequestDTO.builder()
         .id(0L)
-        .category(pet.setCategory("dog"))
+        .category(petStore.setCategory("dog"))
         .name("Такса")
-        .photoUrls(pet.setPhotoUrl("https://images/first.jpg", "https://images/second.jpg"))
-        .tags(pet.setTags("Tag N1", "Tag N2", "Tag N3", "Tag N4"))
+        .photoUrls(petStore.setPhotoUrl("https://images/first.jpg", "https://images/second.jpg"))
+        .tags(petStore.setTags("Tag N1", "Tag N2", "Tag N3", "Tag N4"))
         .status("available")
         .build();
 
-    PetResponseDTO petResponseDTO = pet.addNewPet(petRequestDTO);
-    PetExtensions.deletedList.add(petResponseDTO.getId());
-    PetResponseDTO createdPet = pet.getPetById(petResponseDTO.getId());
-    pet.assertCreatedPet(petRequestDTO, createdPet);
+    PetResponseDTO petResponseDTO = petStore.addNewPet(petRequestDTO);
+    petStore.savePet(petResponseDTO.getId());
+    PetResponseDTO createdPet = petStore.getPetById(petResponseDTO.getId());
+    petStore.assertCreatedPet(petRequestDTO, createdPet);
   }
 
 }

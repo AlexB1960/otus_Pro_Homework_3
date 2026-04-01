@@ -13,14 +13,28 @@ import org.junit.jupiter.api.Assertions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
-public class Pets {
-  public static String baseURL = System.getProperty("baseURL");
-  public static String pathURL = "/v2";
+public class PetStore {
+  public final String baseURL = System.getProperty("baseURL");
+  public final String pathURL = "/v2";
   public final String petURL = "/pet";
-  public static String petIdURL = "/pet/{petId}";
+  public final String petIdURL = "/pet/{petId}";
   public final String petsURL = "/pet/findByStatus";
   public Specifications spec = new Specifications();
+  private Stack<Long> store = new Stack<>();
+
+  public long getPet() {
+    return store.pop();
+  }
+
+  public void savePet(long id) {
+    store.push(id);
+  }
+
+  public boolean isEmpty() {
+    return store.empty();
+  }
 
   public ArrayList<String> setPhotoUrl(String... urlArgs) {
     ArrayList<String> photoUrls = new ArrayList<>();
@@ -59,17 +73,17 @@ public class Pets {
 
     return RestAssured
         .given()
-        .contentType(ContentType.JSON)
-        .auth().oauth2("")
-        .queryParam("status", status)
+          .contentType(ContentType.JSON)
+          .auth().oauth2("")
+          .queryParam("status", status)
         .when()
-        .get(petsURL)
+          .get(petsURL)
         .then()
-        .log().ifValidationFails()
-        .assertThat()
-        .body(JsonSchemaValidator
-            .matchesJsonSchemaInClasspath("getpetschema.json"))
-        .extract().body().jsonPath().getList(".", PetResponseDTO.class);
+          .log().ifValidationFails()
+          .assertThat()
+          .body(JsonSchemaValidator
+              .matchesJsonSchemaInClasspath("getpetschema.json"))
+          .extract().body().jsonPath().getList(".", PetResponseDTO.class);
   }
 
   public PetResponseDTO getPetById(Long petId) {
@@ -78,17 +92,17 @@ public class Pets {
 
     return RestAssured
         .given()
-        .contentType(ContentType.JSON)
-        .auth().oauth2("")
-        .pathParam("petId", petId)
+          .contentType(ContentType.JSON)
+          .auth().oauth2("")
+          .pathParam("petId", petId)
         .when()
-        .get(petIdURL)
+          .get(petIdURL)
         .then()
-        .log().ifValidationFails()
-        .assertThat()
-        .body(JsonSchemaValidator
-            .matchesJsonSchemaInClasspath("postpetschema.json"))
-        .extract().body().jsonPath().getObject(".", PetResponseDTO.class);
+          .log().ifValidationFails()
+          .assertThat()
+          .body(JsonSchemaValidator
+              .matchesJsonSchemaInClasspath("postpetschema.json"))
+          .extract().body().jsonPath().getObject(".", PetResponseDTO.class);
   }
 
   public PetResponseDTO addNewPet(PetRequestDTO petRequestDTO) {
@@ -97,16 +111,17 @@ public class Pets {
 
     return RestAssured
         .given()
-        .contentType(ContentType.JSON)
-        .auth().oauth2("")
-        .body(petRequestDTO)
+          .contentType(ContentType.JSON)
+          .auth().oauth2("")
+          .body(petRequestDTO)
         .when()
-        .post(petURL)
+          .post(petURL)
         .then()
-        .log().ifValidationFails()
-        .assertThat()
-        .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("postpetschema.json"))
-        .extract().body().as(PetResponseDTO.class);
+          .log().ifValidationFails()
+          .assertThat()
+          .body(JsonSchemaValidator
+              .matchesJsonSchemaInClasspath("postpetschema.json"))
+          .extract().body().as(PetResponseDTO.class);
   }
 
   public void assertCreatedPet(PetRequestDTO petRequestDTO, PetResponseDTO createdPet) {
@@ -130,13 +145,13 @@ public class Pets {
 
     RestAssured
         .given()
-        .contentType(ContentType.JSON)
-        .auth().oauth2("")
-        .pathParam("petId", petId)
+          .contentType(ContentType.JSON)
+          .auth().oauth2("")
+          .pathParam("petId", petId)
         .when()
-        .delete(petIdURL)
+          .delete(petIdURL)
         .then()
-        .statusCode(HttpStatus.SC_OK);
+          .statusCode(HttpStatus.SC_OK);
   }
 
 }
