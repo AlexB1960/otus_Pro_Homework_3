@@ -3,9 +3,11 @@ package dto;
 import lombok.*;
 import java.util.ArrayList;
 
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
 @Builder
 @Value
-@Getter
+//@Getter
 public class PetRequestDTO {
   Long id;
   Category category;
