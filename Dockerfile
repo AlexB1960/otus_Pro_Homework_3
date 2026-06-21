@@ -5,11 +5,11 @@ USER root
 ENV PROFILE="api"
 #PROFILE="api" используется далее в pipeline для имени папки с тестами и в плейбуке для названия контейнера
 
-RUN mkdir -p /root/api_tests
-WORKDIR /root/api_tests
+RUN mkdir -p /workspace
+WORKDIR /workspace
 
-COPY . /root/api_tests/
+COPY . .
 
 #ENTRYPOINT [ "./entrypoint.sh" ]
-#ENTRYPOINT ["sh", "-c", "mvn test -P $PROFILE" ]
-ENTRYPOINT ["sh", "-c", "mvn clean test"]
+ENTRYPOINT ["sh", "-c", "mvn test -P $PROFILE" ]
+#ENTRYPOINT ["sh", "-c", "mvn test"]
