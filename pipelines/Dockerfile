@@ -7,7 +7,6 @@ ENV PROFILE="api"
 
 #RUN mkdir -p /otus-allure
 WORKDIR /otus-allure
-
 COPY . .
 
 #ENTRYPOINT [ "./entrypoint.sh" ]
