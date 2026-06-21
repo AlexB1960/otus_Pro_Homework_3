@@ -20,8 +20,8 @@
     - name: Run tests
       ignore_errors: true #если какие-то тесты упали, то сама плейбука не упадет
       community.docker.docker_container: #запускаем в контейнере тесты из образа, который собрали в джобе image
-        name: "otus-allure-{{ profile }}" #имя контейнера(название проекта) + (ui/api/appium)
-        image: "otus-allure:{{ branch }}" #имя того образа, который создали в Dockerfile
+        name: "root/api_tests-{{ profile }}" #имя контейнера(название проекта) + (ui/api/appium)
+        image: "root/api_tests:{{ branch }}" #имя того образа, который создали в Dockerfile
         state: started #ждем, пока контейнер стартует
         network_mode: host #контейнер разворачивается в хостовой сети
         mounts:
@@ -29,8 +29,8 @@
             source: "/var/run/docker.sock"
             target: "/var/run/docker.sock"
           - type: bind #после того, как убедились, что папка есть, ее нужно забиндить
-            source: "/var/jenkins_home{{ pwd_result.stdout }}/allure-results"
-            target: /otus-allure/target/allure-results
+            source: "/var/jenkins_home/root/jenkins{{ pwd_result.stdout }}/allure-results"
+            target: /root/api_tests/target/allure-results
           - type: bind #биндим папку для отчета для МАТТЕРМОСТа
             source: "/var/jenkins_home{{ pwd_result.stdout }}/surefire-reports"
             target: /otus-allure/target/surefire-reports
