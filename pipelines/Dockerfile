@@ -5,8 +5,8 @@ USER root
 ENV PROFILE="api"
 #PROFILE="api" используется далее в pipeline для имени папки с тестами и в плейбуке для названия контейнера
 
-#RUN mkdir -p /otus-allure
-WORKDIR /otus-allure
+#RUN mkdir -p /workspace
+WORKDIR /workspace
 
 COPY . .
 
