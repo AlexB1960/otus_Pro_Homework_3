@@ -19,7 +19,7 @@ timeout(120) {
          cleanWs(deleteDirs: true)
      }
 
-     dir("${params.PROFILE}") {
+     //dir("${params.PROFILE}") {
          try {
              stage("Checkout") {
                  checkout scm  //стягиваем проект
@@ -48,6 +48,6 @@ timeout(120) {
          } finally {
              deleteDir()
          }
-     }
+     //}
    }
 }
