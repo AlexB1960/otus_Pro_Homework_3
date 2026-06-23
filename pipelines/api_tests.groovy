@@ -16,7 +16,7 @@ timeout(120) {
              }
          }
      }  finally {
-         cleanWs(deleteDirs: true)
+         //cleanWs(deleteDirs: true)
      }
 
      dir("${params.PROFILE}") {
@@ -25,13 +25,13 @@ timeout(120) {
                  checkout scm  //стягиваем проект
              }
              stage("Running api-tests") {
-                 //ansiblePlaybook playbook: "playbook.yml", //плейбука, которая запускает тесты (и разворачивает инфраструктуру)
-                 //        extraVars: [
-                 //                branch : "${env.REFSPEC}", //передаем BRANCH в плейбуку ветку, из которой запускаем
-                 //                profile: "${params.PROFILE}" //передаем в плейбуку, какие именно тесты запускаем (ui/api/appium)
-                 //        ]
+                 ansiblePlaybook playbook: "playbook_old.yml", //плейбука, которая запускает тесты (и разворачивает инфраструктуру)
+                         extraVars: [
+                                 branch : "${env.REFSPEC}", //передаем BRANCH в плейбуку ветку, из которой запускаем
+                                 profile: "${params.PROFILE}" //передаем в плейбуку, какие именно тесты запускаем (ui/api/appium)
+                         ]
                  //sh "docker run --rm tests_api:1.0"
-                 sh "docker run --rm api_tests:1.1"
+                 //sh "docker run --rm api_tests:1.1"
              }
          } finally {
              deleteDir()
