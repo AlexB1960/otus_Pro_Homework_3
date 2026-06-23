@@ -26,6 +26,7 @@ timeout(120) {
              }
              stage("Running api-tests") {
                  ansiblePlaybook playbook: "playbook.yml", //плейбука, которая запускает тесты (и разворачивает инфраструктуру?)
+                         installation: "Ansible",
                          extraVars: [
                                  branch : "${env.REFSPEC}", //передаем BRANCH в плейбуку ветку, из которой запускаем
                                  profile: "${params.PROFILE}" //передаем в плейбуку, какие именно тесты запускаем (ui/api/appium)
