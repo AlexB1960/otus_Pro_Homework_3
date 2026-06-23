@@ -25,7 +25,7 @@ timeout(120) {
                  checkout scm  //стягиваем проект
              }
              stage("Running api-tests") {
-                 ansiblePlaybook playbook: "playbook.yml", //плейбука, которая запускает тесты (и разворачивает инфраструктуру)
+                 ansiblePlaybook playbook: "playbook.yml", //плейбука, которая запускает тесты (и разворачивает инфраструктуру?)
                          extraVars: [
                                  branch : "${env.REFSPEC}", //передаем BRANCH в плейбуку ветку, из которой запускаем
                                  profile: "${params.PROFILE}" //передаем в плейбуку, какие именно тесты запускаем (ui/api/appium)
@@ -33,23 +33,21 @@ timeout(120) {
                  //sh "docker run --rm tests_api:1.0"
                  //sh "docker run --rm api_tests:1.1"
              }
+             stage("Allure report") {
+                 sh "tar -czf ajjure-results.tar.gz -C allure-results ." //архивация json-файлов текущещей джобы в tar-архив
+                 archiveArtifacts artifacts: "*.tar.gz", //пушим архив как артифакт текущей джобы
+                         allowEmptyArchive: true, //пустой архив разрешается к пушу
+                         fingerprint: true,
+                         onlyIfSuccessful: true //только если джоба прошла успешно (не упала), но тестам разрешено падать
+                 allure(
+                         results: [[path: "allure-results"]], //результаты искать в папке allure-results
+                         disable: false,
+                         reportBuildPolicy: "ALWAYS" //всегда включаем и всегла собираем
+                 )
+             }
          } finally {
              deleteDir()
          }
-     }
-
-
-     stage("Allure report") {
-         sh "tar -czf ajjure-results.tar.gz -C allure-results ." //архивация json-файлов текущещей джобы в tar-архив
-         archiveArtifacts artifacts: "*.tar.gz", //пушим архив как артифакт текущей джобы
-                 allowEmptyArchive: true, //пустой архив разрешается к пушу
-                 fingerprint: true,
-                 onlyIfSuccessful: true //только если джоба прошла успешно (не упала), но тестам разрешено падать
-         allure(
-                 results: [[path: "allure-results"]], //результаты искать в папке allure-results
-                 disable: false,
-                 reportBuildPolicy: "ALWAYS" //всегда включаем и всегла собираем
-         )
      }
    }
 }
