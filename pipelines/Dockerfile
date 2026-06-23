@@ -6,7 +6,7 @@ ENV PROFILE="api"
 #PROFILE="api" используется далее в pipeline для имени папки с тестами и в плейбуке для названия контейнера
 
 #RUN mkdir -p /otus-allure
-WORKDIR /otus-allure
+WORKDIR /api_tests
 COPY . .
 
 #ENTRYPOINT [ "./entrypoint.sh" ]
