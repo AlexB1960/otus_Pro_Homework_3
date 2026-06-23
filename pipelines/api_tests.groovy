@@ -16,7 +16,7 @@ timeout(120) {
              }
          }
      }  finally {
-         //cleanWs(deleteDirs: true)
+         cleanWs(deleteDirs: true)
      }
 
      dir("${params.PROFILE}") {
