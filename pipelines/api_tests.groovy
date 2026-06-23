@@ -12,7 +12,7 @@ timeout(120) {
          stage("Build Docker image") {
              docker.withRegistry("http://localhost:5005") { //в Registry, который прилагается к дженкинсу
                  //docker.build("otus-allure:${env.REFSPEC}").push() //собираем докер-образ с именем(имя проекта:имя ветки) и пушим его в Registry для дальнейшего запуска
-                 docker.build("HW_03_Pro:1.1").push()
+                 docker.build("api_tests:1.1").push()
              }
          }
      }  finally {

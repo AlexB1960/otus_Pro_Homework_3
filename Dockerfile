@@ -5,8 +5,8 @@ USER root
 ENV PROFILE="api"
 #PROFILE="api" используется далее в pipeline для имени папки с тестами и в плейбуке для названия контейнера
 
-RUN mkdir -p /HW_03_Pro
-WORKDIR /HW_03_Pro
+RUN mkdir -p /api_tests
+WORKDIR /api_tests
 
 COPY . .
 
