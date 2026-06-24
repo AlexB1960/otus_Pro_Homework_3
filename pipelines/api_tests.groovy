@@ -44,7 +44,7 @@ timeout(120) {
                          onlyIfSuccessful: true //только если джоба прошла успешно (не упала), но тестам разрешено падать
                  allure(
                          results: [[path: "allure-results"]], //результаты искать в папке allure-results
-                         disable: false,
+                         disabled: false,
                          reportBuildPolicy: "ALWAYS" //всегда включаем и всегла собираем
                  )
              }
