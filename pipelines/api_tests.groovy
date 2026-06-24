@@ -26,10 +26,7 @@ timeout(120) {
                  checkout scm  //стягиваем проект
              }
              stage("Running api-tests") {
-                 steps {
-                     sh "ls -la"
-                     // или просто: sh 'ls'
-                 }
+                 sh "ls -la"
                  ansiblePlaybook playbook: "playbook.yml", //плейбука, которая запускает тесты (и разворачивает инфраструктуру?)
                  //        installation: "Ansible",
                          extraVars: [
