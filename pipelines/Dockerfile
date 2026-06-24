@@ -10,5 +10,5 @@ WORKDIR /api_tests
 COPY . .
 
 #ENTRYPOINT [ "./entrypoint.sh" ]
-ENTRYPOINT ["sh", "-c", "mvn test -P $PROFILE" ]
+ENTRYPOINT ["sh", "-c", "mvn test -P $PROFILE"]
 #ENTRYPOINT ["sh", "-c", "mvn clean test"]
