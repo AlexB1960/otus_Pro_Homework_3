@@ -27,7 +27,7 @@ timeout(120) {
              stage("Running api-tests") {
                  sh "pwd"
                  sh "ls -la"
-                 ansiblePlaybook playbook: "/pipelines/playbook.yml", //плейбука, которая запускает тесты (и разворачивает инфраструктуру?)
+                 ansiblePlaybook playbook: "./pipelines/playbook.yml", //плейбука, которая запускает тесты (и разворачивает инфраструктуру?)
                  //        installation: "Ansible",
                          extraVars: [
                                  branch : "${env.REFSPEC}", //передаем BRANCH в плейбуку ветку, из которой запускаем
