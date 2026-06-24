@@ -25,8 +25,9 @@ timeout(120) {
                  checkout scm  //стягиваем проект
              }
              stage("Running api-tests") {
+                 sh 'ls -la'
                  ansiblePlaybook playbook: "playbook.yml", //плейбука, которая запускает тесты (и разворачивает инфраструктуру?)
-                         installation: "Ansible",
+                 //        installation: "Ansible",
                          extraVars: [
                                  branch : "${env.REFSPEC}", //передаем BRANCH в плейбуку ветку, из которой запускаем
                                  profile: "${params.PROFILE}" //передаем в плейбуку, какие именно тесты запускаем (ui/api/appium)
