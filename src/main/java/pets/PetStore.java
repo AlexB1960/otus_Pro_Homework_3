@@ -5,6 +5,7 @@ import dto.Category;
 import dto.PetRequestDTO;
 import dto.PetResponseDTO;
 import dto.Tag;
+import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.module.jsv.JsonSchemaValidator;
@@ -36,6 +37,7 @@ public class PetStore {
     return store.empty();
   }
 
+  //@Step("Установить для животного ссылки на фото {urlArgs}")
   public ArrayList<String> setPhotoUrl(String... urlArgs) {
     ArrayList<String> photoUrls = new ArrayList<>();
     /*for (String photoUrl : urlArgs) {
@@ -45,6 +47,7 @@ public class PetStore {
     return photoUrls;
   }
 
+  //@Step("Установить для животного теги {tagArgs}")
   public ArrayList<Tag> setTags(String... tagArgs) {
     ArrayList<Tag> tags = new ArrayList<>();
     Long i = 0L;
@@ -59,6 +62,7 @@ public class PetStore {
     return tags;
   }
 
+  //@Step("Установить для животного категорию {nameCategory}")
   public Category setCategory(String nameCategory) {
     Category category = Category.builder()
         .id(0L)
@@ -67,6 +71,7 @@ public class PetStore {
     return category;
   }
 
+  @Step("Получить животных со статусом {status}")
   public List<PetResponseDTO> getPetsByStatus(String status) {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
         spec.responseSpec(200));
@@ -86,6 +91,7 @@ public class PetStore {
           .extract().body().jsonPath().getList(".", PetResponseDTO.class);
   }
 
+  @Step("Получить животное по его Id={petId}")
   public PetResponseDTO getPetById(Long petId) {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
         spec.responseSpec(200));
@@ -105,6 +111,7 @@ public class PetStore {
           .extract().body().jsonPath().getObject(".", PetResponseDTO.class);
   }
 
+  @Step("Добавить новое животное")
   public PetResponseDTO addNewPet(PetRequestDTO petRequestDTO) {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
         spec.responseSpec(200));
@@ -124,6 +131,7 @@ public class PetStore {
           .extract().body().as(PetResponseDTO.class);
   }
 
+  @Step("Проверить характеристики созданного животного")
   public void assertCreatedPet(PetRequestDTO petRequestDTO, PetResponseDTO createdPet) {
     Assertions.assertAll(
         () -> Assertions.assertEquals(petRequestDTO.getCategory(), createdPet
@@ -139,6 +147,7 @@ public class PetStore {
     );
   }
 
+  @Step("Удалить животное по его Id={petId}")
   public void deletePetById(Long petId) {
     spec.installSpecification(spec.requestSpec(baseURL, pathURL),
         spec.responseSpec(200));

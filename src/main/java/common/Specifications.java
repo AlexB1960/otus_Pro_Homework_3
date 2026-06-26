@@ -1,5 +1,6 @@
 package common;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -14,6 +15,7 @@ public class Specifications {
         .setBaseUri(url)
         .setBasePath(path)
         .setContentType(ContentType.JSON)
+        .addFilter(new AllureRestAssured())
         .build();
   }
 

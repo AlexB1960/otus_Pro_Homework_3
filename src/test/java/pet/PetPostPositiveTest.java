@@ -4,6 +4,10 @@ import com.google.inject.Inject;
 import dto.PetRequestDTO;
 import dto.PetResponseDTO;
 import extensions.PetExtensions;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import pets.PetStore;
@@ -13,6 +17,9 @@ import pets.PetStore;
  * Add a new pet to the store
  */
 @ExtendWith(PetExtensions.class)
+@Epic("Тесты сайта petstore.swagger.io")
+@Story("Позитивные тесты")
+@DisplayName("Позитивные тесты создания животных сайта petstore.swagger.io")
 public class PetPostPositiveTest {// extends AbsMethodsPet
   @Inject
   private PetStore petStore;
@@ -25,6 +32,8 @@ public class PetPostPositiveTest {// extends AbsMethodsPet
   Созданный в тесте pet удаляется в конце теста методом deletePetById
   */
   @Test
+  @DisplayName("Создание животного со всеми валидными полями")
+  @Feature("Создание животного")
   public void createPet200() {
     PetRequestDTO petRequestDTO = PetRequestDTO.builder()
         .id(0L)

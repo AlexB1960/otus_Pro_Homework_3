@@ -2,8 +2,12 @@ package pet;
 
 import com.google.inject.Inject;
 import extensions.PetExtensions;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import pets.PetStore;
@@ -13,6 +17,9 @@ import pets.PetStore;
  * Add a new pet to the store
  */
 @ExtendWith(PetExtensions.class)
+@Epic("Тесты сайта petstore.swagger.io")
+@Story("Негативные тесты")
+@DisplayName("Негативные тесты создания животных сайта petstore.swagger.io")
 public class PetPostNegativeTest {
   @Inject
   private PetStore petStore;
@@ -21,6 +28,8 @@ public class PetPostNegativeTest {
   Проверка получения кода статуса 405 через спецификацию.
   */
   @Test
+  @DisplayName("Создание животного методом get вместо post")
+  @Feature("Статус кода 405")
   public void createPet405() {
     petStore.spec.installSpecification(petStore.spec.requestSpec(petStore.baseURL, petStore.pathURL),
         petStore.spec.responseSpec(405));
