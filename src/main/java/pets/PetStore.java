@@ -73,11 +73,11 @@ public class PetStore {
 
   @Step("Получить животных со статусом {status}")
   public List<PetResponseDTO> getPetsByStatus(String status) {
-    spec.installSpecification(spec.requestSpec(baseURL, pathURL),
-        spec.responseSpec(200));
+    /*spec.installSpecification(spec.requestSpec(baseURL, pathURL),
+        spec.responseSpec(200));*/
 
     return RestAssured
-        .given()
+        .given(spec.requestSpec(baseURL, pathURL))
           .contentType(ContentType.JSON)
           .auth().oauth2("")
           .queryParam("status", status)
@@ -85,6 +85,7 @@ public class PetStore {
           .get(petsURL)
         .then()
           .log().ifValidationFails()
+          .spec(spec.responseSpec(200))
           .assertThat()
           .body(JsonSchemaValidator
               .matchesJsonSchemaInClasspath("getpetschema.json"))
@@ -93,11 +94,11 @@ public class PetStore {
 
   @Step("Получить животное по его Id={petId}")
   public PetResponseDTO getPetById(Long petId) {
-    spec.installSpecification(spec.requestSpec(baseURL, pathURL),
-        spec.responseSpec(200));
+    /*spec.installSpecification(spec.requestSpec(baseURL, pathURL),
+        spec.responseSpec(200));*/
 
     return RestAssured
-        .given()
+        .given(spec.requestSpec(baseURL, pathURL))
           .contentType(ContentType.JSON)
           .auth().oauth2("")
           .pathParam("petId", petId)
@@ -105,6 +106,7 @@ public class PetStore {
           .get(petIdURL)
         .then()
           .log().ifValidationFails()
+          .spec(spec.responseSpec(200))
           .assertThat()
           .body(JsonSchemaValidator
               .matchesJsonSchemaInClasspath("postpetschema.json"))
@@ -113,11 +115,11 @@ public class PetStore {
 
   @Step("Добавить новое животное")
   public PetResponseDTO addNewPet(PetRequestDTO petRequestDTO) {
-    spec.installSpecification(spec.requestSpec(baseURL, pathURL),
-        spec.responseSpec(200));
+    /*spec.installSpecification(spec.requestSpec(baseURL, pathURL),
+        spec.responseSpec(200));*/
 
     return RestAssured
-        .given()
+        .given(spec.requestSpec(baseURL, pathURL))
           .contentType(ContentType.JSON)
           .auth().oauth2("")
           .body(petRequestDTO)
@@ -125,6 +127,7 @@ public class PetStore {
           .post(petURL)
         .then()
           .log().ifValidationFails()
+          .spec(spec.responseSpec(200))
           .assertThat()
           .body(JsonSchemaValidator
               .matchesJsonSchemaInClasspath("postpetschema.json"))
@@ -149,17 +152,18 @@ public class PetStore {
 
   @Step("Удалить животное по его Id={petId}")
   public void deletePetById(Long petId) {
-    spec.installSpecification(spec.requestSpec(baseURL, pathURL),
-        spec.responseSpec(200));
+    /*spec.installSpecification(spec.requestSpec(baseURL, pathURL),
+        spec.responseSpec(200));*/
 
     RestAssured
-        .given()
+        .given(spec.requestSpec(baseURL, pathURL))
           .contentType(ContentType.JSON)
           .auth().oauth2("")
           .pathParam("petId", petId)
         .when()
           .delete(petIdURL)
         .then()
+          .spec(spec.responseSpec(200))
           .statusCode(HttpStatus.SC_OK);
   }
 

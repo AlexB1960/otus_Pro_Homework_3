@@ -31,11 +31,11 @@ public class PetPostNegativeTest {
   @DisplayName("Создание животного методом get вместо post")
   @Feature("Статус кода 405")
   public void createPet405() {
-    petStore.spec.installSpecification(petStore.spec.requestSpec(petStore.baseURL, petStore.pathURL),
-        petStore.spec.responseSpec(405));
+    /*petStore.spec.installSpecification(petStore.spec.requestSpec(petStore.baseURL, petStore.pathURL),
+        petStore.spec.responseSpec(405));*/
 
     RestAssured
-        .given()
+        .given(petStore.spec.requestSpec(petStore.baseURL, petStore.pathURL))
           .contentType(ContentType.JSON)
           .auth().oauth2("")
           .body("{\n"
@@ -44,6 +44,7 @@ public class PetPostNegativeTest {
         .when()
           .get(petStore.petURL) //get вместо post
         .then()
+          .spec(petStore.spec.responseSpec(405))
           .log().all();
   }
 

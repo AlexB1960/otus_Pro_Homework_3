@@ -34,17 +34,18 @@ public class PetGetNegativeTest {
   @DisplayName("Получение списка животных по несуществующему статусу WrongStatus")
   @Feature("Статус кода 400")
   public void getPets400() {
-    petStore.spec.installSpecification(petStore.spec.requestSpec(petStore.baseURL, petStore.pathURL),
-        petStore.spec.responseSpec(400));
+    /*petStore.spec.installSpecification(petStore.spec.requestSpec(petStore.baseURL, petStore.pathURL),
+        petStore.spec.responseSpec(400));*/
 
     RestAssured
-        .given()
+        .given(petStore.spec.requestSpec(petStore.baseURL, petStore.pathURL))
           .contentType(ContentType.JSON)
           .auth().oauth2("")
           .queryParam("status", "WrongStatus")
         .when()
           .get(petStore.petsURL)
         .then()
+          .spec(petStore.spec.responseSpec(400))
           .statusCode(HttpStatus.SC_BAD_REQUEST); //SC_BAD_REQUEST
   }
 
