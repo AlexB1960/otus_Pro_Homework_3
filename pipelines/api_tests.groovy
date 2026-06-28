@@ -48,18 +48,18 @@ timeout(120) {
                          reportBuildPolicy: "ALWAYS" //всегда включаем и всегда собираем
                  )
              }
-             stage("Send notification") { //отправка сообщения на Mattermost JOB: ${env.JOB_NAME}
+             stage("Send notification") { //отправка сообщения на Mattermost JOB: ${env.JOB_NAME} ${currentBuild.description}     See [full report](${env.BUILD_URL}allure) for details.
                  def summary = junit testResults: "**/surefire-reports/*.xml" //забрали общую статистику, из которой далее составили части сообщения
                  String message = """Test Summary
                                         |
-                                        |${currentBuild.desciption}
+                                        |
                                         |
                                         |Total: ${summary.totalCount}
                                         |Passed: ${summary.passCount}
                                         |Failed: ${summary.failCount}
                                         |Skipped: ${summary.skipCount}
                                         |
-                                        |See [full report](${env.BUILD_URL}allure) for details."""
+                                        |"""
                          .stripMargin()
                  withCredentials([ //из Jenkins Credentials
                                    string(credentialsId: "mattermost-webhook", variable: "WEBHOOK"), //какую переменную записать в строку, т.е. WEBHOOK=адрес из МАТТЕРМОСТа
