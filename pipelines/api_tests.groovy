@@ -45,13 +45,13 @@ timeout(120) {
                  allure(
                          results: [[path: "allure-results"]], //результаты искать в папке allure-results
                          disabled: false,
-                         reportBuildPolicy: "ALWAYS" //всегда включаем и всегла собираем
+                         reportBuildPolicy: "ALWAYS" //всегда включаем и всегда собираем
                  )
              }
-             stage("Send notification") { //отправка сообщения на Mattermost
+             stage("Send notification") { //отправка сообщения на Mattermost JOB: ${env.JOB_NAME}
                  def summary = junit testResults: "**/surefire-reports/*.xml" //забрали общую статистику, из которой далее составили части сообщения
                  String message = """Test Summary
-                                        |JOB: ${env.JOB_NAME}
+                                        |
                                         |${currentBuild.desciption}
                                         |
                                         |Total: ${summary.totalCount}
