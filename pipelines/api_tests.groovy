@@ -48,6 +48,33 @@ timeout(120) {
                          reportBuildPolicy: "ALWAYS" //всегда включаем и всегла собираем
                  )
              }
+             stage("Send notification") { //отправка сообщения на Mattermost
+                 def summary = junit testResults: "**/surefire-reports/*.xml" //забрали общую статистику, из которой далее составили части сообщения
+                 String message = """Test Summary
+                                        |JOB: ${env.JOB_NAME}
+                                        |${currentBuild.desciption}
+                                        |
+                                        |Total: ${summary.totalCount}
+                                        |Passed: ${summary.passCount}
+                                        |Failed: ${summary.failCount}
+                                        |Skipped: ${summary.skipCount}
+                                        |
+                                        |See [full report](${env.BUILD_URL}allure) for details."""
+                         .stripMargin()
+                 withCredentials([ //из Jenkins Credentials
+                                   string(credentialsId: "mattermost-webhook", variable: "WEBHOOK"), //какую переменную записать в строку, т.е. WEBHOOK=адрес из МАТТЕРМОСТа
+                                   string(credentialsId: "mattermost-users-to-notify", variable: "USERS") //для имен пользователей
+                 ]) {
+                     env.USERS.tokenize(",").each { username ->  //разбиваем список пользователей через запятую и отправляем каждому наше сообщение
+                         httpRequest consoleLogResponseBody: true, //в консоль запишем ответ, успешно или неуспешно отправилось сообщение
+                                 contentType: "APPLICATION_JSON",
+                                 httpMode: "POST",
+                                 requestBody:"{\"text\":\"$message\",\"channel\":\"@$username\",\"username\":\"Jenkins\"}",
+                                 url: "${env.WEBHOOK}" //куда отправляем сообщение
+                     }
+
+                 }
+             }
          } finally {
              deleteDir()
          }
