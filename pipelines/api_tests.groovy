@@ -37,7 +37,7 @@ timeout(120) {
                  //sh "docker run --rm api_tests:1.1"
              }
              stage("Allure report") {
-                 sh "tar -czf ajjure-results.tar.gz -C allure-results ." //архивация json-файлов текущещей джобы в tar-архив
+                 sh "tar -czf allure-results.tar.gz -C allure-results ." //архивация json-файлов текущещей джобы в tar-архив
                  archiveArtifacts artifacts: "*.tar.gz", //пушим архив как артифакт текущей джобы
                          allowEmptyArchive: true, //пустой архив разрешается к пушу
                          fingerprint: true,
